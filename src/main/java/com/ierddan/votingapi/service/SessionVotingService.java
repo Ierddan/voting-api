@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,12 +14,11 @@ public class SessionVotingService {
 
     private static final String DEACTIVATED = "DEACTIVATED";
 
-    @Autowired
     private final SessionVotingRepository repository;
 
-    @Autowired
     public final VotingThemeService votingThemeService;
 
+    @Autowired
     public SessionVotingService(SessionVotingRepository repository, VotingThemeService votingThemeService) {
         this.repository = repository;
         this.votingThemeService = votingThemeService;
@@ -40,7 +38,7 @@ public class SessionVotingService {
     public SessionVoting findByIdSessionVoting(Long idSessionVoting) {
         try {
             SessionVoting sessionVoting = repository.findByIdSessionVoting(idSessionVoting);
-            disableSessionVoting(sessionVoting);
+            validateSessionVoting(sessionVoting);
             return sessionVoting;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao buscar o objeto SessionVoting");
@@ -51,7 +49,7 @@ public class SessionVotingService {
         try {
             List<SessionVoting> sessionVotings = repository.findAll();
             for (SessionVoting sessionVoting : sessionVotings) {
-                disableSessionVoting(sessionVoting);
+                validateSessionVoting(sessionVoting);
             }
             return sessionVotings;
         } catch (Exception e) {
@@ -68,7 +66,7 @@ public class SessionVotingService {
         return repository.save(currentSessionVoting);
     }
 
-    private void disableSessionVoting(SessionVoting sessionVoting) {
+    public void validateSessionVoting(SessionVoting sessionVoting) {
         LocalDateTime current = LocalDateTime.now();
         LocalDateTime limit = sessionVoting.getStartVoting().plusMinutes(1);
         if (current.isAfter(limit)) {

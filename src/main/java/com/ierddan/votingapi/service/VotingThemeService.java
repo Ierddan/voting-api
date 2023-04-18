@@ -10,9 +10,9 @@ import java.util.List;
 @Service
 public class VotingThemeService {
 
-    @Autowired
     private final VotingThemeRepository repository;
 
+    @Autowired
     public VotingThemeService(VotingThemeRepository repository) {
         this.repository = repository;
     }

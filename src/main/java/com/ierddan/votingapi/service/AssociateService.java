@@ -14,11 +14,11 @@ import java.util.List;
 @Service
 public class AssociateService {
 
-    @Autowired
-    private AssociateRepository repository;
-    @Autowired
-    private ViaCepApiClient viaCepClient;
+    private final AssociateRepository repository;
 
+    private final ViaCepApiClient viaCepClient;
+
+    @Autowired
     public AssociateService(AssociateRepository repository,ViaCepApiClient viaCepClient) {
         this.repository = repository;
         this.viaCepClient = viaCepClient;

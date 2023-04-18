@@ -11,15 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class VoteService {
 
-    @Autowired
     private final VoteRepository repository;
 
-    @Autowired
     public final AssociateService associateService;
 
-    @Autowired
     public final SessionVotingService sessionVotingService;
 
+    @Autowired
     public VoteService(VoteRepository repository, AssociateService associateService, SessionVotingService sessionVotingService) {
         this.repository = repository;
         this.associateService = associateService;
