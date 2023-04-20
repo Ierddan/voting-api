@@ -7,6 +7,8 @@ import com.ierddan.votingapi.entity.Associate;
 import com.ierddan.votingapi.repository.AssociateRepository;
 import com.ierddan.votingapi.util.AssociateUtils;
 import feign.FeignException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import static com.ierddan.votingapi.util.AssociateUtils.*;
 
 @Service
 public class AssociateService {
+
+    private final Logger logger = LoggerFactory.getLogger(AssociateService.class);
 
     private final AssociateRepository repository;
 
@@ -28,6 +32,7 @@ public class AssociateService {
     }
 
     public Associate saveAssociate(Associate associate) {
+        logger.info("class=AssociateService method=saveAssociate associate="+associate.toString());
         try {
             validateAssociate(associate);
             if (repository.existsByCpf(associate.getCpf())) {
@@ -41,6 +46,7 @@ public class AssociateService {
     }
 
     public List<AssociateOutput> getAllAssociates() {
+        logger.info("class=AssociateService method=getAllAssociates");
         try {
             List<Associate> listAssociates = repository.findAll();
             return listAssociates.stream()
@@ -52,6 +58,7 @@ public class AssociateService {
     }
 
     public AssociateOutput findAssociateById(Long id) {
+        logger.info("class=AssociateService method=findAssociateById");
         try {
             Associate associate = repository.findByIdAssociate(id);
             AddressResponse address = getAddress(associate.getAddressCode());
@@ -62,6 +69,7 @@ public class AssociateService {
     }
 
     public Associate findAssociateByCpf(String cpf) {
+        logger.info("class=AssociateService method=findAssociateByCpf");
         try {
             return repository.findByCpf(cpf);
         } catch (Exception e) {
@@ -70,6 +78,7 @@ public class AssociateService {
     }
 
     public AddressResponse getAddress(String addressCode) throws FeignException {
+        logger.info("class=AssociateService method=getAddress");
         try {
             return viaCepClient.getAddres(addressCode).getBody();
         } catch (Exception e) {
@@ -78,6 +87,7 @@ public class AssociateService {
     }
 
     public void deleteAssociate(Long id) {
+        logger.info("class=AssociateService method=deleteAssociate");
         try {
             repository.deleteById(id);
         } catch (Exception e) {
@@ -86,6 +96,7 @@ public class AssociateService {
     }
 
     public AssociateOutput updateAssociate(Associate associate) {
+        logger.info("class=AssociateService method=updateAssociate associate="+associate.toString());
         validateAssociate(associate);
         try {
             Associate currentAssociate = repository.findByIdAssociate(associate.getIdAssociate());

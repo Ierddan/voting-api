@@ -3,6 +3,8 @@ package com.ierddan.votingapi.service;
 import com.ierddan.votingapi.entity.SessionVoting;
 import com.ierddan.votingapi.entity.VotingTheme;
 import com.ierddan.votingapi.repository.SessionVotingRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Service
 public class SessionVotingService {
+
+    private final Logger logger = LoggerFactory.getLogger(SessionVotingService.class);
 
     private static final String DEACTIVATED = "DEACTIVATED";
     private static final int TIME_SESSION = 1;
@@ -26,6 +30,8 @@ public class SessionVotingService {
     }
 
     public SessionVoting createSessionVoting(Long idVotingTheme) {
+        logger.info("class=SessionVotingService method=createSessionVoting");
+
         VotingTheme votingTheme = votingThemeService.findVotingThemeById(idVotingTheme);
 
         SessionVoting sessionVoting = new SessionVoting(votingTheme);
@@ -37,6 +43,7 @@ public class SessionVotingService {
     }
 
     public SessionVoting findByIdSessionVoting(Long idSessionVoting) {
+        logger.info("class=SessionVotingService method=findByIdSessionVoting");
         try {
             SessionVoting sessionVoting = repository.findByIdSessionVoting(idSessionVoting);
             validateSessionVoting(sessionVoting);
@@ -47,6 +54,7 @@ public class SessionVotingService {
     }
 
     public List<SessionVoting> findAllSessionVoting() {
+        logger.info("class=SessionVotingService method=findAllSessionVoting");
         try {
             List<SessionVoting> sessionVotings = repository.findAll();
             for (SessionVoting sessionVoting : sessionVotings) {
@@ -59,6 +67,7 @@ public class SessionVotingService {
     }
 
     public SessionVoting closeSessionVoting(Long idSessionVoting) {
+        logger.info("class=SessionVotingService method=closeSessionVoting");
         SessionVoting currentSessionVoting = findByIdSessionVoting(idSessionVoting);
         if (!currentSessionVoting.getActive().equals("ACTIVE")) {
             throw new IllegalStateException("Session Voting já está fechada!");
