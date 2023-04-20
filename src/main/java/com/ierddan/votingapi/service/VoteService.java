@@ -29,8 +29,8 @@ public class VoteService {
     }
 
     public Vote createVoting(VoteInput voteInput) {
-        logger.info("class=VoteService method=CreateVoting voteInput="+voteInput.toString());
-        if(repository.validatedVote(voteInput.getIdSessionVoting(), voteInput.getCpf())){
+        logger.info("class=VoteService method=CreateVoting voteInput=" + voteInput.toString());
+        if (repository.validatedVote(voteInput.getIdSessionVoting(), voteInput.getCpf())) {
             throw new RuntimeException("Associate has already voted!");
         }
 
@@ -40,7 +40,7 @@ public class VoteService {
         Vote voting = new Vote(sessionVoting, associate, voteInput.getVote());
         try {
             return repository.save(voting);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("");
         }
     }

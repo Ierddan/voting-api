@@ -22,7 +22,7 @@ public class VotingThemeService {
     }
 
     public VotingTheme saveVotingTheme(VotingTheme votingTheme) {
-        logger.info("class=VotingThemeService method=saveVotingTheme votingTheme="+votingTheme.toString());
+        logger.info("class=VotingThemeService method=saveVotingTheme votingTheme=" + votingTheme.toString());
         try {
             return repository.save(votingTheme);
         } catch (Exception e) {
@@ -50,9 +50,9 @@ public class VotingThemeService {
 
     public void deleteVotingTheme(Long id) {
         logger.info("class=VotingThemeService method=deleteVotingTheme");
-        try{
+        try {
             repository.deleteById(id);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Erro ao buscar o objeto VotingTheme");
         }
     }

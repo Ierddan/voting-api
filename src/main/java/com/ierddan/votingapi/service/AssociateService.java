@@ -32,7 +32,7 @@ public class AssociateService {
     }
 
     public Associate saveAssociate(Associate associate) {
-        logger.info("class=AssociateService method=saveAssociate associate="+associate.toString());
+        logger.info("class=AssociateService method=saveAssociate associate=" + associate.toString());
         try {
             validateAssociate(associate);
             if (repository.existsByCpf(associate.getCpf())) {
@@ -96,7 +96,7 @@ public class AssociateService {
     }
 
     public AssociateOutput updateAssociate(Associate associate) {
-        logger.info("class=AssociateService method=updateAssociate associate="+associate.toString());
+        logger.info("class=AssociateService method=updateAssociate associate=" + associate.toString());
         validateAssociate(associate);
         try {
             Associate currentAssociate = repository.findByIdAssociate(associate.getIdAssociate());
