@@ -4,13 +4,7 @@ import com.ierddan.votingapi.resource.associate.response.AssociateOutput;
 import com.ierddan.votingapi.entity.Associate;
 import com.ierddan.votingapi.service.AssociateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,5 +38,10 @@ public class AssociateResource {
     @DeleteMapping("/associate/{id}")
     public void deleteAssociate(@PathVariable Long id) {
         service.deleteAssociate(id);
+    }
+
+    @PutMapping("/associate/{id}")
+    public AssociateOutput updateAssociateById(@RequestBody Associate associate){
+        return service.updateAssociate(associate);
     }
 }

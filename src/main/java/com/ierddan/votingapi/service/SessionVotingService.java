@@ -13,6 +13,7 @@ import java.util.List;
 public class SessionVotingService {
 
     private static final String DEACTIVATED = "DEACTIVATED";
+    private static final int TIME_SESSION = 1;
 
     private final SessionVotingRepository repository;
 
@@ -68,7 +69,7 @@ public class SessionVotingService {
 
     public void validateSessionVoting(SessionVoting sessionVoting) {
         LocalDateTime current = LocalDateTime.now();
-        LocalDateTime limit = sessionVoting.getStartVoting().plusMinutes(1);
+        LocalDateTime limit = sessionVoting.getStartVoting().plusMinutes(TIME_SESSION);
         if (current.isAfter(limit)) {
             sessionVoting.setActive(DEACTIVATED);
         }

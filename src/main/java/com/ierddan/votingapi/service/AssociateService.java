@@ -5,11 +5,14 @@ import com.ierddan.votingapi.client.response.AddressResponse;
 import com.ierddan.votingapi.resource.associate.response.AssociateOutput;
 import com.ierddan.votingapi.entity.Associate;
 import com.ierddan.votingapi.repository.AssociateRepository;
+import com.ierddan.votingapi.util.AssociateUtils;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.ierddan.votingapi.util.AssociateUtils.*;
 
 @Service
 public class AssociateService {
@@ -19,13 +22,14 @@ public class AssociateService {
     private final ViaCepApiClient viaCepClient;
 
     @Autowired
-    public AssociateService(AssociateRepository repository,ViaCepApiClient viaCepClient) {
+    public AssociateService(AssociateRepository repository, ViaCepApiClient viaCepClient) {
         this.repository = repository;
         this.viaCepClient = viaCepClient;
     }
 
     public Associate saveAssociate(Associate associate) {
         try {
+            validateAssociate(associate);
             if (repository.existsByCpf(associate.getCpf())) {
                 throw new IllegalArgumentException("CPF já cadastrado!");
             } else {
@@ -78,6 +82,31 @@ public class AssociateService {
             repository.deleteById(id);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao buscar o objeto Associate");
+        }
+    }
+
+    public AssociateOutput updateAssociate(Associate associate) {
+        validateAssociate(associate);
+        try {
+            Associate currentAssociate = repository.findByIdAssociate(associate.getIdAssociate());
+            currentAssociate.setName(associate.getName());
+            currentAssociate.setCpf(associate.getCpf());
+            currentAssociate.setAddressCode(associate.getAddressCode());
+            AddressResponse address = getAddress(associate.getAddressCode());
+
+            repository.save(currentAssociate);
+            return new AssociateOutput(currentAssociate, address);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar o objeto Associate");
+        }
+    }
+
+    private void validateAssociate(Associate associate) {
+        if (!validateCpf(associate.getCpf())) {
+            throw new IllegalArgumentException("Número de CPF inválido!!");
+        }
+        if (!AssociateUtils.validateCep(associate.getAddressCode())) {
+            throw new IllegalArgumentException("Número de CEP inválido!!");
         }
     }
 }
